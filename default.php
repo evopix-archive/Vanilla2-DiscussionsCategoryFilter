@@ -12,7 +12,7 @@ $PluginInfo['DiscussionsCategoryFilter'] = array(
 
 class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 
-	public function Base_GetAppSettingsMenuItems_Handler(&$Sender) {
+	public function Base_GetAppSettingsMenuItems_Handler($Sender) {
 		$Menu = &$Sender->EventArguments['SideMenu'];
 		
 		$LinkText = T('Discussions Category Filtering');
@@ -20,7 +20,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		$Menu->AddLink('Forum', $LinkText, 'plugin/discussionscategoryfilter', 'Garden.Settings.Manage');
 	}
 
-	public function PluginController_DiscussionsCategoryFilter_Create(&$Sender)
+	public function PluginController_DiscussionsCategoryFilter_Create($Sender)
 	{
 		$Sender->Title('Discussions: Category Filtering');
 		$Sender->AddSideMenu('plugin/discussionscategoryfilter');
@@ -28,7 +28,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		$this->Dispatch($Sender, $Sender->RequestArgs);
 	}
 
-	public function Controller_Index(&$Sender)
+	public function Controller_Index($Sender)
 	{
 		$Sender->AddCssFile('admin.css');
 		$Sender->CategoryData = $this->GetAllCategories();
@@ -36,7 +36,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		$Sender->Render($this->GetView('discussionscategoryfilter.php'));
 	}
 
-	public function Controller_Disable(&$Sender)
+	public function Controller_Disable($Sender)
 	{
 		$Arguments = $Sender->RequestArgs;
 		
@@ -56,7 +56,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		$this->Controller_Index($Sender);
 	}
 
-	public function Controller_Enable(&$Sender)
+	public function Controller_Enable($Sender)
 	{
 		$Arguments = $Sender->RequestArgs;
 		
@@ -73,7 +73,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		$this->Controller_Index($Sender);
 	}
 
-	public function Controller_EnableAll(&$Sender)
+	public function Controller_EnableAll($Sender)
 	{
 		Gdn::SQL()->Update('Category')
            ->Set('ShowInAllDiscussions', 1)
@@ -82,7 +82,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		$this->Controller_Index($Sender);
 	}
 
-	public function DiscussionModel_BeforeGet_Handler(&$Sender)
+	public function DiscussionModel_BeforeGet_Handler($Sender)
 	{
 		if (Gdn::Dispatcher()->Application() == 'vanilla' 
 			AND Gdn::Dispatcher()->ControllerName() == 'DiscussionsController' 
