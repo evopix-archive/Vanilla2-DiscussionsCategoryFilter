@@ -4,7 +4,7 @@
 $PluginInfo['DiscussionsCategoryFilter'] = array(
    'Name' => 'Discussions Category Filter',
    'Description' => 'Filters what categories to show on all discussions page.',
-   'Version' => '1.0',
+   'Version' => '1.0.1',
    'Author' => "Brandon Summers",
    'AuthorEmail' => 'brandon@evolutionpixels.com',
    'AuthorUrl' => 'http://www.evolutionpixels.com'
