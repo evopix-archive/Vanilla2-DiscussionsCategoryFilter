@@ -2,19 +2,19 @@
 
 // Define the plugin:
 $PluginInfo['DiscussionsCategoryFilter'] = array(
-   'Name' => 'Discussions Category Filter',
-   'Description' => 'Filters what categories to show on all discussions page.',
-   'Version' => '1.0.1',
-   'Author' => "Brandon Summers",
-   'AuthorEmail' => 'brandon@evolutionpixels.com',
-   'AuthorUrl' => 'http://www.evolutionpixels.com'
+	'Name' => 'Discussions Category Filter',
+	'Description' => 'Filters what categories to show on all discussions page.',
+	'Version' => '1.0.1',
+	'Author' => "Brandon Summers",
+	'AuthorEmail' => 'brandon@evolutionpixels.com',
+	'AuthorUrl' => 'http://www.evolutionpixels.com'
 );
 
 class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 
 	public function Base_GetAppSettingsMenuItems_Handler($Sender) {
 		$Menu = &$Sender->EventArguments['SideMenu'];
-		
+
 		$LinkText = T('Discussions Category Filtering');
 		$Menu->AddItem('Forum', T('Forum'));
 		$Menu->AddLink('Forum', $LinkText, 'plugin/discussionscategoryfilter', 'Garden.Settings.Manage');
@@ -32,26 +32,26 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 	{
 		$Sender->AddCssFile('admin.css');
 		$Sender->CategoryData = $this->GetAllCategories();
-		
+
 		$Sender->Render($this->GetView('discussionscategoryfilter.php'));
 	}
 
 	public function Controller_Disable($Sender)
 	{
 		$Arguments = $Sender->RequestArgs;
-		
+
 		if (sizeof($Arguments) != 2)
 			return;
-		
+
 		list($Controller, $CategoryID) = $Arguments;
 
 		Gdn::SQL()->Delete('Flag',array(
-			'ForeignURL'      => $URL
+			'ForeignURL' => $URL
 		));
 		Gdn::SQL()->Update('Category')
-           ->Set('ShowInAllDiscussions', 0)
-           ->Where('CategoryID', $CategoryID)
-           ->Put();
+			->Set('ShowInAllDiscussions', 0)
+			->Where('CategoryID', $CategoryID)
+			->Put();
 
 		$this->Controller_Index($Sender);
 	}
@@ -66,9 +66,9 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		list($Controller, $CategoryID) = $Arguments;
 
 		Gdn::SQL()->Update('Category')
-           ->Set('ShowInAllDiscussions', 1)
-           ->Where('CategoryID', $CategoryID)
-           ->Put();
+			->Set('ShowInAllDiscussions', 1)
+			->Where('CategoryID', $CategoryID)
+			->Put();
 
 		$this->Controller_Index($Sender);
 	}
