@@ -92,6 +92,18 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 		}
 	}
 
+	public function DiscussionsController_AfterBuildPager_Handler($Sender)
+	{
+		if (Gdn::Dispatcher()->Application() == 'vanilla' 
+			AND Gdn::Dispatcher()->ControllerName() == 'DiscussionsController' 
+			AND ucfirst(Gdn::Dispatcher()->ControllerMethod()) == 'Index')
+		{
+			$DiscussionModel = new DiscussionModel();
+			$CountDiscussions = $DiscussionModel->GetCount(array('c.ShowInAllDiscussions =' => '1'));
+			$Sender->Pager->TotalRecords = is_numeric($CountDiscussions) ? $CountDiscussions : 0;
+		}
+	}
+
 	public function GetAllCategories()
 	{
 		$Categories = Gdn::SQL()
