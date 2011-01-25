@@ -86,7 +86,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 	{
 		if (Gdn::Dispatcher()->Application() == 'vanilla' 
 			AND Gdn::Dispatcher()->ControllerName() == 'DiscussionsController' 
-			AND Gdn::Dispatcher()->ControllerMethod() == 'index')
+			AND ucfirst(Gdn::Dispatcher()->ControllerMethod()) == 'Index')
 		{
 			$Sender->SQL->Where('ca.ShowInAllDiscussions =', '1');
 		}
