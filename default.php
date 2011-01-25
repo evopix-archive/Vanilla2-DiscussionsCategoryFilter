@@ -101,6 +101,33 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 			$DiscussionModel = new DiscussionModel();
 			$CountDiscussions = $DiscussionModel->GetCount(array('c.ShowInAllDiscussions =' => '1'));
 			$Sender->Pager->TotalRecords = is_numeric($CountDiscussions) ? $CountDiscussions : 0;
+
+			// Override the Anouncements data. This is somewhat hackish, but there is no other way.
+			$Arguments = Gdn::Dispatcher()->ControllerArguments();
+			$Page = $Arguments[0];
+
+			// Determine offset from $Page
+			list($Page, $Limit) = OffsetLimit($Page, Gdn::Config('Vanilla.Discussions.PerPage', 30));
+
+			// Validate $Page
+			if (!is_numeric($Page) || $Page < 0)
+				$Page = 0;
+
+			$CategoryIDs = array();
+			$Categories = Gdn::SQL()
+				->Select('c.CategoryID, c.Name, c.CountDiscussions, c.AllowDiscussions, c.ShowInAllDiscussions')
+				->From('Category c')
+				->Where('c.ShowInAllDiscussions =', '0')
+				->OrderBy('Sort', 'asc')
+				->Get();
+
+			foreach ($Categories as $Category)
+			{
+				$CategoryIDs[] = $Category->CategoryID;
+			}
+
+			$Sender->AnnounceData = $Page == 0 ? $DiscussionModel->GetAnnouncements(array('d.CategoryID <> ' => implode(' and d.CategoryID <> ', $CategoryIDs))) : FALSE;
+			$Sender->SetData('Announcements', $Sender->AnnounceData !== FALSE ? $Sender->AnnounceData : array(), TRUE);
 		}
 	}
 
