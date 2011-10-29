@@ -4,7 +4,9 @@
 $PluginInfo['DiscussionsCategoryFilter'] = array(
 	'Name' => 'Discussions Category Filter',
 	'Description' => 'Filters what categories to show on all discussions page.',
-	'Version' => '1.0.1',
+	'Version' => '1.0.2',
+	'SettingsUrl' => '/dashboard/plugin/discussionscategoryfilter',
+	'SettingsPermission' => 'Garden.Settings.Manage',
 	'Author' => "Brandon Summers",
 	'AuthorEmail' => 'brandon@evolutionpixels.com',
 	'AuthorUrl' => 'http://www.evolutionpixels.com'
@@ -22,6 +24,7 @@ class DiscussionsCategoryFilterPlugin extends Gdn_Plugin {
 
 	public function PluginController_DiscussionsCategoryFilter_Create($Sender)
 	{
+		$Sender->Permission('Garden.Settings.Manage');
 		$Sender->Title('Discussions: Category Filtering');
 		$Sender->AddSideMenu('plugin/discussionscategoryfilter');
 		$Sender->Form = new Gdn_Form();
